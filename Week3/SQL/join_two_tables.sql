@@ -6,9 +6,9 @@ from actor as a
  join film_actor as f
 on a.actor_id = f.actor_id
 group by a.actor_id  #a.first_name, a.last_name
-order by films desc;
-#limit 1;
-#the answer is SUSAN DAVIS with 54 films; but GitHub has Geina DEGENERS with 42 films
+order by films desc
+limit 1;
+
 
 
 /* 2.Most active customer (the customer that has rented 
