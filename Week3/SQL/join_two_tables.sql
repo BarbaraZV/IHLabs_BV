@@ -5,7 +5,7 @@ select a.first_name, a.last_name, count(f.film_id) as films
 from actor as a
  join film_actor as f
 on a.actor_id = f.actor_id
-group by a.actor_id  #a.first_name, a.last_name
+group by a.actor_id, a.first_name, a.last_name #write in the group by the id ant the columns in the select
 order by films desc
 limit 1;
 
@@ -19,10 +19,9 @@ select c.first_name
 from  rental as r 
 join customer as c
 on r.customer_id = c.customer_id
-group by c.customer_id
+group by c.customer_id, c.first_name, c.last_name
 order by active_customer desc
-limit 1
-;
+limit 1;
 
 
 
@@ -30,8 +29,9 @@ limit 1
 
 select c.name, count(fc.film_id) as number_films
 from category as c
-join film_category as fc on c.category_id = fc.category_id
-group by c.name
+join film_category as fc 
+on c.category_id = fc.category_id
+group by fc.category_id, c.name
 order by number_films ;
 
 /*4. Display the first and last names, as well as the address, 
@@ -47,21 +47,18 @@ select s.first_name, s.last_name, sum(p.amount) rungup_amount
 from staff as s
 join payment as p 
 using(staff_id) # on s.staff_id = p.staff_id
-where payment_date like '2005-08%'
-group by staff_id
+where payment_date like '2005-08%' # OR where year(payment_date) = 2005 and month(payment_date) = 08
+group by s.staff_id
 order by s.first_name;
-
-
-
 
 /* 6. List each film and the number of actors who are listed for that film. */
 select distinct f.title, count(actor_id) as number_actors
 from film as f
-join film_actor as a
+left join film_actor as a
 using(film_id)
-group by f.title
-order by number_actors desc
-limit 10;
+group by f.title, film_id
+order by number_actors  desc ;
+#limit 10;
 
 
 /*7. Using the tables payment and customer and the JOIN command, list the total
@@ -78,7 +75,7 @@ limit 10
 /*Optional: Which is the most rented film? The answer is Bucket Brotherhood 
  This query might require using more than one join statement. Give it a try.
 */
-select  f.title as title, count(r.rental_date) number_rentals
+select  f.title as title, count(r.rental_date) as number_rentals
 from rental as r
 inner join (inventory as i) using (inventory_id)
 inner join (film as f) using (film_id)
