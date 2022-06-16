@@ -38,6 +38,13 @@ where film_id in (select film_id
 				  where category_id in (select category_id
 									    from category as c
 									    where name = 'Family'));
+select title
+from film
+where film_id in (select film_id
+				from film_category as fc
+				join category as c using(category_id)
+				where c.name = 'Family');
+
 
 /*5. Get name and email from customers from Canada using subqueries. 
 Do the same with joins. Note that to create a join, you will have to 
@@ -77,6 +84,18 @@ where film_id in (select film_id
 														group by actor_id
 														order by number_films desc 
                                                         limit 1) as sub1));
+
+#OTHER WAY
+with mpa as (select actor_id 
+			 from film_actor
+			 group by actor_id 
+			 order by count(film_id) desc limit 1)
+            
+            select title
+            from film 
+            join film_actor using (film_id)
+            where actor_id = (select actor_id from mpa);
+
 
 
 /*7. Films rented by most profitable customer. 
